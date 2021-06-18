@@ -14,6 +14,4 @@ public class RegisterPostDto {
     private String phone;
     private String password;
     private String username;
-
-
 }
