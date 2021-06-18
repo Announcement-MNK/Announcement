@@ -9,4 +9,6 @@ public class User {
     private double balance;
 
     private List<Transaction> transactionList;
+    private List<Listing> listingList;
+    private List<Subscription> subscriptions;
 }

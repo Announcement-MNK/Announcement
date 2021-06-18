@@ -4,6 +4,7 @@ import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.FuelType;
 
 public class Subscription {
+    private User user;
     private Make make;
     private Model model;
     private City city;

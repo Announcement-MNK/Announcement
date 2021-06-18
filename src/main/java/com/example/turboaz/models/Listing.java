@@ -3,9 +3,11 @@ package com.example.turboaz.models;
 import com.example.turboaz.enums.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Listing {
     private long id;
+    private User user;
     private Model model;
     private int year;
     private City city;
@@ -19,6 +21,8 @@ public class Listing {
     private BodyType bodyType;
     private Color color;
     private boolean isDisabled;
+    private List<Equipment> equipments;
+    private List<Image> images;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
