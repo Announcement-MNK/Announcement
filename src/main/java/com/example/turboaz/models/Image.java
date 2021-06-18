@@ -1,7 +1,20 @@
 package com.example.turboaz.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "images")
+
 public class Image {
-     private int id;
-     private Listing listing;
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     @Id
+     private Long id;
      private boolean isMain;
 }
