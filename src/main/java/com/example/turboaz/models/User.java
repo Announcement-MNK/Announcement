@@ -1,14 +1,27 @@
 package com.example.turboaz.models;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.List;
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
 public class User {
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Long id;
     private String email;
     private String username;
     private double balance;
-
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Transaction> transactionList;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Listing> listingList;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Subscription> subscriptions;
 }
