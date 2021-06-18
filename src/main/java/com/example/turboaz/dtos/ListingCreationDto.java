@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListingCreationDTO {
+public class ListingCreationDto {
     private Long makeId;
     private Long modelId;
     private int year;
