@@ -2,7 +2,7 @@ package com.example.turboaz.dtos;
 
 import java.time.LocalDateTime;
 
-public class TransactionListDto {
+public class TransactionDto {
     private int id;
     private Long listingId;
     private double amount;
