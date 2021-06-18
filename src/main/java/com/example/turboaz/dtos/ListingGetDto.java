@@ -4,20 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListingCreationDTO {
-    private Long makeId;
-    private Long modelId;
+public class ListingGetDto {
+    private Long id;
+    private MakeDTO make;
+    private ModelDTO model;
     private int year;
     private int price;
     private int mileage;
     private String fuelType;
     private String bodyType;
     private String color;
-    private Long cityId;
+    private CityDTO city;
     private String gearBox;
     private boolean autoPay;
     private boolean creditOption;
@@ -26,6 +27,8 @@ public class ListingCreationDTO {
     private boolean cashOption;
     private String description;
     private String type;
-    private String thymbnailUrl;
-    private List<Integer> carSpecIds;
+    private String thumbnailUrl;
+    private List<CarSpecDTO> carSpecs;
+    private LocalDateTime updatedAt;
+    private boolean isActive;
 }
