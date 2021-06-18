@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ListingGetDto {
     private Long id;
+    private UserDto user;
     private MakeDto make;
     private ModelDto model;
     private int year;
