@@ -16,7 +16,7 @@ public class SearchDto {
     private int maxPrice;
     private double minMileage;
     private double maxMileage;
-    private int fuelTypeb;
+    private int fuelType;
     private int bodyType;
     private boolean hasLoan;
     private boolean hasLease;
