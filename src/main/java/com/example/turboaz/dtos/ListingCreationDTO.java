@@ -19,7 +19,7 @@ public class ListingCreationDTO {
     private String color;
     private Long cityId;
     private String gearBox;
-    private boolean auto_pay;
+    private boolean autoPay;
     private boolean creditOption;
     private boolean barterOption;
     private boolean leaseOption;

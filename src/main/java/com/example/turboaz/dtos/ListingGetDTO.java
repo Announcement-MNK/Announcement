@@ -20,7 +20,7 @@ public class ListingGetDTO {
     private String color;
     private CityDTO city;
     private String gearBox;
-    private boolean auto_pay;
+    private boolean autoPay;
     private boolean creditOption;
     private boolean barterOption;
     private boolean leaseOption;
