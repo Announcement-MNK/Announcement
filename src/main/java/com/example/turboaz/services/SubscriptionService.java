@@ -3,6 +3,7 @@ package com.example.turboaz.services;
 import com.example.turboaz.dtos.ListingListDto;
 import com.example.turboaz.dtos.SubscriptionDto;
 import com.example.turboaz.dtos.SubscriptionListDto;
+import com.example.turboaz.exceptions.SubscriptionMaxCountException;
 import com.example.turboaz.exceptions.SubscriptionNotFoundException;
 import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.utils.Paging;
@@ -18,7 +19,7 @@ public interface SubscriptionService {
      * @param userId
      * @return SubscriptionDto
      */
-    SubscriptionDto createSubscription(Long userId, SubscriptionDto subscriptionDto);
+    SubscriptionDto createSubscription(Long userId, SubscriptionDto subscriptionDto) throws SubscriptionMaxCountException;
 
     /**
      * @param subscriptionDto

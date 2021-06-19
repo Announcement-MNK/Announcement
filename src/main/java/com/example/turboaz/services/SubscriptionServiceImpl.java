@@ -2,6 +2,7 @@ package com.example.turboaz.services;
 
 import com.example.turboaz.dtos.*;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.exceptions.SubscriptionMaxCountException;
 import com.example.turboaz.exceptions.SubscriptionNotFoundException;
 import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.helpers.DtoHelper;
@@ -32,11 +33,16 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDto createSubscription(Long userId, SubscriptionDto subscriptionDto) {
+    public SubscriptionDto createSubscription(Long userId, SubscriptionDto subscriptionDto) throws SubscriptionMaxCountException {
         User user = userRepository.findById(userId).get();
-        Subscription subscription = convertToEntity(subscriptionDto, user);
-        subscriptionRepository.save(subscription);
-        return subscriptionDto;
+        if(user.getSubscriptions().size()<5){
+            Subscription subscription = convertToEntity(subscriptionDto, user);
+            subscriptionRepository.save(subscription);
+            return subscriptionDto;
+
+        }else{
+            throw new SubscriptionMaxCountException("This user already has 5 subscriptions");
+        }
     }
 
     @Override
