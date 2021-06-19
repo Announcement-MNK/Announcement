@@ -1,4 +1,4 @@
-package com.example.turboaz.service;
+package com.example.turboaz.services;
 
 import com.example.turboaz.dtos.TransactionDto;
 import com.example.turboaz.enums.TransactionPurpose;
