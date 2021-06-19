@@ -1,6 +1,7 @@
 package com.example.turboaz.models;
 
 import com.example.turboaz.enums.BodyType;
+import com.example.turboaz.enums.Color;
 import com.example.turboaz.enums.FuelType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,4 +42,5 @@ public class Subscription {
     private boolean hasLoan;
     private boolean hasLease;
     private boolean hasCash;
+    private Color color;
 }

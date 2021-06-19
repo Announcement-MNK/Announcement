@@ -1,5 +1,7 @@
 package com.example.turboaz.dtos;
 
+import com.example.turboaz.models.Subscription;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,8 +17,8 @@ public class SubscriptionListDto {
     private int maxPrice;
     private double minMileage;
     private double maxMileage;
-    private int fuelType;
-    private int bodyType;
+    private String fuelType;
+    private String bodyType;
     private boolean loanOption;
     private boolean leaseOption;
     private boolean cashOption;
@@ -24,4 +26,23 @@ public class SubscriptionListDto {
     private LocalDateTime creationDate;
     private String color;
     private List<CarSpecDto> specs;
+
+    public SubscriptionListDto(Subscription subscription) {
+        this.name = subscription.getUser().getFullName();
+        this.make = new MakeDto(subscription.getMake());
+        this.model = new ModelDto(subscription.getModel());
+        this.city = new CityDto(subscription.getCity());
+        this.minYear = subscription.getMinYear();
+        this.maxYear = subscription.getMaxYear();
+        this.minPrice = subscription.getMinPrice();
+        this.maxPrice = subscription.getMaxPrice();
+        this.minMileage = subscription.getMinMileage();
+        this.maxMileage = subscription.getMaxMileage();
+        this.fuelType = subscription.getFuelType().name();
+        this.bodyType = subscription.getBodyType().name();
+        this.loanOption = subscription.isHasLoan();
+        this.leaseOption = subscription.isHasLease();
+        this.cashOption = subscription.isHasCash();
+        this.color = subscription.getColor().name();
+    }
 }
