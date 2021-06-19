@@ -2,6 +2,8 @@ package com.example.turboaz.helpers;
 
 import com.example.turboaz.dtos.ListingCreationDto;
 import com.example.turboaz.dtos.ListingListDto;
+import com.example.turboaz.dtos.SubscriptionDto;
+import com.example.turboaz.dtos.SubscriptionListDto;
 import com.example.turboaz.enums.*;
 import com.example.turboaz.models.*;
 import org.dom4j.rule.Mode;
@@ -12,7 +14,7 @@ import java.util.List;
 public class DtoHelper {
     public static Listing convertListingCreationDtoToEntity(ListingCreationDto dto,
                                                             Model model, City city,
-                                                            List<CarSpecification> carSpecifications){
+                                                            List<CarSpecification> carSpecifications) {
         Listing listing = new Listing();
         listing.setBodyType(BodyType.valueOf(dto.getBodyType()));
         listing.setCity(city);
@@ -34,10 +36,37 @@ public class DtoHelper {
         return listing;
     }
 
-    public static List<ListingListDto> convertToListingListDto(List<Listing> listings){
+    public static List<ListingListDto> convertToListingListDto(List<Listing> listings) {
         List<ListingListDto> listingListDtos = new ArrayList<>();
         listings.forEach(l -> listingListDtos.add(new ListingListDto(l)));
         return listingListDtos;
+    }
+
+    public static Subscription convertSubscriptionDtoToEntity(SubscriptionDto dto,
+                                                              Model model, City city, Make make, User user) {
+        Subscription subscription = new Subscription();
+        subscription.setBodyType(BodyType.valueOf(dto.getBodyType()));
+        subscription.setCity(city);
+        subscription.setModel(model);
+        subscription.setColor(Color.valueOf(dto.getColor()));
+        subscription.setMinYear(dto.getMinYear());
+        subscription.setMaxYear(dto.getMaxYear());
+        subscription.setMinPrice(dto.getMinPrice());
+        subscription.setMaxPrice(dto.getMaxPrice());
+        subscription.setMake(make);
+        subscription.setHasLoan(dto.isLoanOption());
+        subscription.setHasCash(dto.isCashOption());
+        subscription.setHasLease(dto.isLeaseOption());
+        subscription.setFuelType(FuelType.valueOf(dto.getFuelType()));
+        subscription.setColor(subscription.getColor());
+        subscription.setUser(user);
+        return subscription;
+    }
+
+    public static List<SubscriptionListDto> convertToSubscriptionListDto(List<Subscription> subscriptions) {
+        List<SubscriptionListDto> subscriptionListDtos = new ArrayList<>();
+        subscriptions.forEach(s -> subscriptionListDtos.add(new SubscriptionListDto(s)));
+        return subscriptionListDtos;
     }
 
 }

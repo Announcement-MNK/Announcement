@@ -1,7 +1,12 @@
 package com.example.turboaz.services;
 
+import com.example.turboaz.dtos.ListingListDto;
 import com.example.turboaz.dtos.SubscriptionDto;
 import com.example.turboaz.dtos.SubscriptionListDto;
+import com.example.turboaz.exceptions.SubscriptionMaxCountException;
+import com.example.turboaz.exceptions.SubscriptionNotFoundException;
+import com.example.turboaz.exceptions.UserNotFoundException;
+import com.example.turboaz.utils.Paging;
 
 import java.util.List;
 
@@ -14,7 +19,7 @@ public interface SubscriptionService {
      * @param userId
      * @return SubscriptionDto
      */
-    SubscriptionDto createSubscription(Long userId, SubscriptionDto subscriptionDto);
+    SubscriptionDto createSubscription(Long userId, SubscriptionDto subscriptionDto) throws SubscriptionMaxCountException;
 
     /**
      * @param subscriptionDto
@@ -22,19 +27,19 @@ public interface SubscriptionService {
      * @param subscriptionId
      * @return SubscriptionDto
      */
-    SubscriptionDto updateSubscription(Long userId, Long subscriptionId, SubscriptionDto subscriptionDto);
+    SubscriptionDto updateSubscription(Long userId, Long subscriptionId, SubscriptionDto subscriptionDto) throws SubscriptionNotFoundException, UserNotFoundException;
 
     /**
      * @param id
      * @param userId
      */
-    void deleteSubscription(Long userId, Long id);
+    void deleteSubscription(Long userId, Long id) throws SubscriptionNotFoundException, UserNotFoundException;
 
     /**
      * @param userId
      * @return List<SubscriptionListDto>
      */
-    List<SubscriptionListDto> getAllSubscriptions(Long userId);
+    List<SubscriptionListDto> getAllSubscriptions(Long userId) throws UserNotFoundException;
 
     /**
      * @param userId
@@ -42,5 +47,12 @@ public interface SubscriptionService {
      * @return SubscriptionDto
      */
 
-    SubscriptionDto getSubscription(Long userId, Long id);
+    SubscriptionDto getSubscription(Long userId, Long id) throws SubscriptionNotFoundException, UserNotFoundException;
+
+    /**
+     * @param username
+     * @return List<SubscriptionListDto>
+     */
+    List<SubscriptionListDto> getUserSubscriptions(String username);
 }
+
