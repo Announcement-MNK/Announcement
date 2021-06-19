@@ -14,9 +14,7 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
 
     Subscription getSubscriptionById(Long id);
 
-    Subscription findSubscriptionByUserIdAndId(Long userId, Long id);
 
     Page<Subscription> findSubscriptionByUsername(String username, Pageable pageable);
-    Page<Subscription> findAll(Pageable pageable);
 
 }

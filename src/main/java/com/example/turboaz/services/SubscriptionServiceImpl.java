@@ -3,6 +3,7 @@ package com.example.turboaz.services;
 import com.example.turboaz.dtos.*;
 import com.example.turboaz.exceptions.ListingNotFoundException;
 import com.example.turboaz.exceptions.SubscriptionNotFoundException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.helpers.DtoHelper;
 import com.example.turboaz.helpers.PagingHelper;
 import com.example.turboaz.models.*;
@@ -39,9 +40,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDto updateSubscription(Long userId, Long subscriptionId, SubscriptionDto subscriptionDto) throws SubscriptionNotFoundException {
-        Subscription subscription = subscriptionRepository.findSubscriptionByUserIdAndId(userId, subscriptionId);
+    public SubscriptionDto updateSubscription(Long userId, Long subscriptionId, SubscriptionDto subscriptionDto) throws SubscriptionNotFoundException, UserNotFoundException {
+
         User user = userRepository.findById(userId).get();
+        if (user == null) throw new UserNotFoundException("User is not found");
+        Subscription subscription = user.getSubscriptions().stream()
+                .filter(s -> s.getId() == subscriptionId).findAny().get();
         if (subscription != null) throw new SubscriptionNotFoundException("This subscription is not found");
         Subscription newSubscription = convertToEntity(subscriptionDto, user);
         newSubscription.setId(subscriptionId);
@@ -50,39 +54,46 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public void deleteSubscription(Long userId, Long id) throws SubscriptionNotFoundException {
-        Subscription subscription = subscriptionRepository.findSubscriptionByUserIdAndId(userId, id);
-        if (subscription == null) throw new SubscriptionNotFoundException("This subscription is not found");
-        subscriptionRepository.delete(subscription);
+    public void deleteSubscription(Long userId, Long id) throws SubscriptionNotFoundException, UserNotFoundException {
+        User user = userRepository.findById(userId).get();
+        if (user == null) throw new UserNotFoundException("This user not found");
+        Optional<Subscription> subscription = user.getSubscriptions().stream()
+                .filter(s -> s.getId() == id).findAny();
+        if (subscription.get() == null) throw new SubscriptionNotFoundException("This subscription is not found");
+        subscriptionRepository.delete(subscription.get());
     }
 
     @Override
-    public Paging<SubscriptionListDto> getAllSubscriptions(Long userId, int index, int size, String sortBy) {
-        Pageable paging = PagingHelper.preparePage(index, size, sortBy);
-        Page<Subscription> subscriptions = subscriptionRepository.findAll(paging);
-        return new Paging<SubscriptionListDto>().toBuilder()
-                .pageCount((long) subscriptions.getTotalPages())
-                .pageSize(subscriptions.getTotalElements())
-                .items(DtoHelper.convertToSubscriptionListDto(PagingHelper.getResult(subscriptions)))
-                .build();
+    public List<SubscriptionListDto> getAllSubscriptions(Long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).get();
+        if (user == null) throw new UserNotFoundException("This user not found");
+        List<SubscriptionListDto> subscriptionListDtos = new ArrayList<>();
+        for (Subscription subscription : user.getSubscriptions()) {
+            subscriptionListDtos.add(new SubscriptionListDto(subscription));
+        }
+        return subscriptionListDtos;
     }
 
     @Override
-    public SubscriptionDto getSubscription(Long userId, Long id) throws SubscriptionNotFoundException {
-        Optional<Subscription> subscription = subscriptionRepository.findById(id);
-        if (subscription == null) throw new SubscriptionNotFoundException("Can't find such listing");
+    public SubscriptionDto getSubscription(Long userId, Long id) throws SubscriptionNotFoundException, UserNotFoundException {
+        User user = userRepository.findById(userId).get();
+        if (user == null) throw new UserNotFoundException("This user not found");
+
+        Optional<Subscription> subscription = user.getSubscriptions().stream()
+                .filter(s -> s.getId() == id).findAny();
+        if (subscription.get() == null) throw new SubscriptionNotFoundException("Can't find such listing");
         return new SubscriptionDto(subscription.get());
     }
 
     @Override
-    public Paging<SubscriptionListDto> getUserSubscriptions(String username, int index, int size, String sortBy) {
-        Pageable paging = PagingHelper.preparePage(index, size, sortBy);
-        Page<Subscription> subscriptions = subscriptionRepository.findSubscriptionByUsername(username, paging);
-        return new Paging<SubscriptionListDto>().toBuilder()
-                .pageCount((long) subscriptions.getTotalPages())
-                .pageSize(subscriptions.getTotalElements())
-                .items(DtoHelper.convertToSubscriptionListDto(PagingHelper.getResult(subscriptions)))
-                .build();
+    public List<SubscriptionListDto> getUserSubscriptions(String username) {
+        User user = userRepository.findUserByUsername(username);
+        List<SubscriptionListDto> subscriptionListDtos = new ArrayList<>();
+        for (Subscription subscription : user.getSubscriptions()) {
+            subscriptionListDtos.add(new SubscriptionListDto(subscription));
+        }
+        return subscriptionListDtos;
+
     }
 
     public Subscription convertToEntity(SubscriptionDto subscriptionDto, User user) {
