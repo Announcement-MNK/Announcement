@@ -29,23 +29,24 @@ public class Listing {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")
     private City city;
-    private double mileage;
-    private boolean hasBarter;
+    private int mileage;
     private int price;
-    private double engine;
     private FuelType fuelType;
     private GearBox gearBox;
     private ListingType type;
     private BodyType bodyType;
     private Color color;
-    private boolean isDisabled;
+    private boolean autoPay;
+    private boolean creditOption;
+    private boolean barterOption;
+    private boolean leaseOption;
+    private boolean cashOption;
+    private String description;
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<Equipment> equipments;
+    private List<CarSpecification> carSpecifications;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private List<Image> images;
-
-    private LocalDateTime createdAt;
+    private boolean isActive;
     private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
 }

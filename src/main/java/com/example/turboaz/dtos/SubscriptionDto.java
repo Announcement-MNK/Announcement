@@ -19,8 +19,8 @@ public class SubscriptionDto {
     private int maxYear;
     private int minPrice;
     private int maxPrice;
-    private double minMileage;
-    private double maxMileage;
+    private int minMileage;
+    private int maxMileage;
     private int fuelType;
     private int bodyType;
     private boolean loanOption;

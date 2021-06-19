@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "equipments")
 
-public class Equipment {
+public class CarSpecification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
 
     private long id;
     private String name;
-    @ManyToMany(mappedBy = "equipments")
+    @ManyToMany(mappedBy = "carSpecifications")
     private List<Listing> listingList;
 }
