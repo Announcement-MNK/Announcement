@@ -6,6 +6,9 @@ import com.example.turboaz.dtos.ListingListDto;
 import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.FuelType;
 import com.example.turboaz.enums.Loan;
+import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.utils.Paging;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,29 +21,34 @@ public interface ListingService {
      * @param listingCreateDto
      * @return listingGetDto
      */
-    ListingGetDto createListing(ListingCreationDto listingCreateDto);
+    ListingGetDto createListing(Long userId, ListingCreationDto listingCreateDto);
 
     /**
      * @param listingCreateDto
      * @return listingGetDto
      */
-    ListingGetDto updateListing(Long id, ListingCreationDto listingCreateDto);
+    ListingGetDto updateListing(Long userId, Long id, ListingCreationDto listingCreateDto) throws ListingNotFoundException;
 
     /**
      * @param id
      */
-    void deleteListing(Long id);
+    void deleteListing(Long userId, Long id) throws ListingNotFoundException;
 
     /**
      * @return listingListDto
      */
-    List<ListingListDto> getAllListings();
+    Paging<ListingListDto> getAllListings(int index, int size, String sortBy);
+
+    /**
+     * @return listingListDto
+     */
+    Paging<ListingListDto> getUserListings(String username, int index, int size, String sortBy);
 
     /**
      * @param id
      * @return listingGetDto
      */
-    ListingGetDto getListing(Long id);
+    ListingGetDto getListing(Long id) throws ListingNotFoundException;
 
     /**
      *

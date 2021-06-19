@@ -26,6 +26,6 @@ public class ListingCreationDto {
     private boolean cashOption;
     private String description;
     private String type;
-    private String thymbnailUrl;
-    private List<Integer> carSpecIds;
+    private String thumbnailUrl;
+    private List<Long> carSpecIds;
 }
