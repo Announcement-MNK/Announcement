@@ -17,4 +17,6 @@ public class Image {
      @Id
      private Long id;
      private boolean isMain;
+     @Lob
+     byte[] content;
 }

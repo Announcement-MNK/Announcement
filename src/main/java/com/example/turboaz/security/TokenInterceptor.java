@@ -23,9 +23,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             Base64.Decoder decoder = Base64.getDecoder();
             String data = new String(decoder.decode(chunks[1]));
             JsonNode payload = new ObjectMapper().readValue(data,JsonNode.class);
-            user.setUsername(payload.get("preferred_name").textValue());
-            user.setFullName(payload.get("name").textValue());
-            user.setPhone(payload.get("phone_number").textValue());
+            user.setUsername(payload.get("preferred_username").textValue());
             request.setAttribute("user",user);
         }
         return true;

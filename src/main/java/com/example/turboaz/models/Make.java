@@ -18,6 +18,4 @@ public class Make {
     @Id
     private Long id;
     private String name;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "make")
-    private List<Model> models;
 }
