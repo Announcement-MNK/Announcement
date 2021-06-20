@@ -1,9 +1,6 @@
 package com.example.turboaz.helpers;
 
-import com.example.turboaz.dtos.ListingCreationDto;
-import com.example.turboaz.dtos.ListingListDto;
-import com.example.turboaz.dtos.SubscriptionDto;
-import com.example.turboaz.dtos.SubscriptionListDto;
+import com.example.turboaz.dtos.*;
 import com.example.turboaz.enums.*;
 import com.example.turboaz.models.*;
 import org.dom4j.rule.Mode;
@@ -68,5 +65,13 @@ public class DtoHelper {
         subscriptions.forEach(s -> subscriptionListDtos.add(new SubscriptionListDto(s)));
         return subscriptionListDtos;
     }
-
+    public static Transaction convertTransactionDtoToEntity(TransactionDto dto, User user,Listing listing){
+        Transaction transaction = new Transaction();
+        transaction.setAmount(dto.getAmount());
+        transaction.setUser(user);
+        transaction.setListing(listing);
+        transaction.setCreatedAt(dto.getCreatedAt());
+        transaction.setDeleted(dto.isDeleted());
+        return transaction;
+    }
 }
