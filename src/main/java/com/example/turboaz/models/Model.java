@@ -17,9 +17,7 @@ public class Model {
     @Id
     private Long id;
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "make_id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "make_id", referencedColumnName = "id")
     private Make make;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "model")
-    private List<Listing> listings;
 }

@@ -21,18 +21,18 @@ public interface ListingService {
      * @param listingCreateDto
      * @return listingGetDto
      */
-    ListingGetDto createListing(Long userId, ListingCreationDto listingCreateDto);
+    ListingGetDto createListing(String username, ListingCreationDto listingCreateDto);
 
     /**
      * @param listingCreateDto
      * @return listingGetDto
      */
-    ListingGetDto updateListing(Long userId, Long id, ListingCreationDto listingCreateDto) throws ListingNotFoundException;
+    ListingGetDto updateListing(String username, Long id, ListingCreationDto listingCreateDto) throws ListingNotFoundException;
 
     /**
      * @param id
      */
-    void deleteListing(Long userId, Long id) throws ListingNotFoundException;
+    void deleteListing(String username, Long id) throws ListingNotFoundException;
 
     /**
      * @return listingListDto
@@ -49,6 +49,21 @@ public interface ListingService {
      * @return listingGetDto
      */
     ListingGetDto getListing(Long id) throws ListingNotFoundException;
+
+    /**
+     *
+     * @param id
+     * @throws ListingNotFoundException
+     */
+    void makeVip(Long id) throws ListingNotFoundException;
+
+
+    /**
+     *
+     * @param id
+     * @throws ListingNotFoundException
+     */
+    void makePaid(Long id) throws ListingNotFoundException;
 
     /**
      *

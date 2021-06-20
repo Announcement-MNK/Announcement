@@ -3,6 +3,7 @@ package com.example.turboaz.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @Data
@@ -26,6 +27,6 @@ public class ListingCreationDto {
     private boolean cashOption;
     private String description;
     private String type;
-    private String thumbnailUrl;
+//    private MultipartFile thumbnail;
     private List<Long> carSpecIds;
 }

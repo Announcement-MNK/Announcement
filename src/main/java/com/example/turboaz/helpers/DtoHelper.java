@@ -11,10 +11,12 @@ import java.util.List;
 public class DtoHelper {
     public static Listing convertListingCreationDtoToEntity(ListingCreationDto dto,
                                                             Model model, City city,
+                                                            User user,
                                                             List<CarSpecification> carSpecifications) {
         Listing listing = new Listing();
         listing.setBodyType(BodyType.valueOf(dto.getBodyType()));
         listing.setCity(city);
+        listing.setUser(user);
         listing.setModel(model);
         listing.setColor(Color.valueOf(dto.getColor()));
         listing.setPrice(dto.getPrice());
