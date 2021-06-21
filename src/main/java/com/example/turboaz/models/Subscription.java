@@ -3,6 +3,8 @@ package com.example.turboaz.models;
 import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.Color;
 import com.example.turboaz.enums.FuelType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
