@@ -17,6 +17,9 @@ public class Image {
      @Id
      private Long id;
      private boolean isMain;
-     @Lob
-     byte[] content;
+     String url;
+     @ManyToOne
+     @JoinColumn(name = "listing_id")
+     private Listing listing;
+
 }

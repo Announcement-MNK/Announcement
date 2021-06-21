@@ -109,7 +109,6 @@ public class ListingServiceImpl implements  ListingService{
         listingRepository.save(listing.get());
     }
 
-
     //TODO FINISH SEARCH
     @Override
     public List<ListingGetDto> search(Long makeId, Long modelId, Long cityId, Integer minYear, Integer maxYear, Integer minPrice, Integer maxPrice, Integer minMillage, Integer maxMillage, String fuelType, String loan, String bodyType, String gearbox, String transactionType, List<Long> specIds, String color) {
