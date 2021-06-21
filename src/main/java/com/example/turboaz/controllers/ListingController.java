@@ -5,6 +5,7 @@ import com.example.turboaz.dtos.ListingGetDto;
 import com.example.turboaz.dtos.ListingListDto;
 import com.example.turboaz.dtos.UserDto;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.services.FileService;
 import com.example.turboaz.services.ListingService;
 import com.example.turboaz.utils.Paging;
 import javassist.tools.web.BadHttpRequest;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class ListingController {
 
     ListingService service;
+    FileService fileService;
 
-    public ListingController(ListingService service){
+    public ListingController(ListingService service, FileService fileService){
         this.service = service;
+        this.fileService = fileService;
     }
 
     /**
