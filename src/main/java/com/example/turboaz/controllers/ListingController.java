@@ -1,12 +1,12 @@
 package com.example.turboaz.controllers;
 
-import com.example.turboaz.dtos.ListingCreationDto;
-import com.example.turboaz.dtos.ListingGetDto;
-import com.example.turboaz.dtos.ListingListDto;
-import com.example.turboaz.dtos.UserDto;
+import com.example.turboaz.dtos.*;
+import com.example.turboaz.exceptions.ImageNotFoundException;
 import com.example.turboaz.exceptions.ListingNotFoundException;
-import com.example.turboaz.services.FileService;
+import com.example.turboaz.services.FileServiceImpl;
+import com.example.turboaz.services.ImageService;
 import com.example.turboaz.services.ListingService;
+import com.example.turboaz.services.TransactionService;
 import com.example.turboaz.utils.Paging;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.http.HttpStatus;
@@ -14,16 +14,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 public class ListingController {
 
     ListingService service;
-    FileService fileService;
+    ImageService imageService;
+    TransactionService transactionService;
 
-    public ListingController(ListingService service, FileService fileService){
+
+    public ListingController(ListingService service,
+                             ImageService imageService,
+                             TransactionService transactionService){
         this.service = service;
-        this.fileService = fileService;
+        this.imageService = imageService;
+        this.transactionService = transactionService;
     }
 
     /**
@@ -113,5 +120,30 @@ public class ListingController {
     public ResponseEntity makePaid(@PathVariable Long id) throws ListingNotFoundException {
         service.makePaid(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/listings/{id}/image")
+    public ResponseEntity<ImageDto> addImage(@PathVariable Long id,
+                                             @RequestParam("file")MultipartFile file,
+                                             @RequestAttribute("user") UserDto userDto) throws ListingNotFoundException {
+        return new ResponseEntity<>(imageService.uploadImage(userDto.getFullName(), id, file), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/listings/{listingId}/images")
+    public ResponseEntity<List<ImageDto>> getImages(@PathVariable Long listingId){
+        return new ResponseEntity<>(imageService.getImages(listingId), HttpStatus.OK);
+    }
+
+    @GetMapping("/listings/{listingId}/images/{id}")
+    public ResponseEntity<ImageDto> getImage(@PathVariable Long listingId, @PathVariable Long id) throws ImageNotFoundException, ListingNotFoundException {
+        return new ResponseEntity<>(imageService.getImageById(listingId, id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/listings/{listingId}/images/{id}")
+    public ResponseEntity deleteImage(@PathVariable Long listingId,
+                                      @PathVariable Long id,
+                                      @RequestAttribute("user") UserDto userDto) throws ImageNotFoundException, ListingNotFoundException {
+        imageService.deleteImage(userDto.getUsername(), listingId, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
