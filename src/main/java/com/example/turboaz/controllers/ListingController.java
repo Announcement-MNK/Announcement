@@ -12,6 +12,7 @@ import javassist.tools.web.BadHttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -113,5 +114,4 @@ public class ListingController {
         service.makePaid(id);
         return new ResponseEntity(HttpStatus.OK);
     }
-
 }
