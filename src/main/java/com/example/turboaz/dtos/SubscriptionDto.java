@@ -32,6 +32,7 @@ public class SubscriptionDto {
     private List<Long> specs;
 
     public SubscriptionDto(Subscription subscription) {
+        this.subId=subscription.getId();
         this.name = subscription.getUser().getFullName();
         this.makeId = subscription.getMake().getId();
         this.modelId = subscription.getModel().getId();

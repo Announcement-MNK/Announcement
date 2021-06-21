@@ -53,6 +53,8 @@ public class DtoHelper {
         subscription.setMinPrice(dto.getMinPrice());
         subscription.setMaxPrice(dto.getMaxPrice());
         subscription.setMake(make);
+        subscription.setMaxMileage(dto.getMaxMileage());
+        subscription.setMinMileage(dto.getMinMileage());
         subscription.setHasLoan(dto.isLoanOption());
         subscription.setHasCash(dto.isCashOption());
         subscription.setHasLease(dto.isLeaseOption());
