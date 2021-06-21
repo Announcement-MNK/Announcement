@@ -2,6 +2,7 @@ package com.example.turboaz.controllers;
 
 import com.example.turboaz.dtos.SubscriptionDto;
 import com.example.turboaz.dtos.SubscriptionListDto;
+import com.example.turboaz.dtos.UserDto;
 import com.example.turboaz.exceptions.MingreaterthanMaxException;
 import com.example.turboaz.exceptions.SubscriptionMaxCountException;
 import com.example.turboaz.exceptions.SubscriptionNotFoundException;
@@ -29,23 +30,23 @@ public class SubscriptionController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/profile/subscriptions/{userId}")
-    public ResponseEntity<List<SubscriptionListDto>> getAll(@PathVariable long userId) throws UserNotFoundException {
+    @GetMapping("/profile/subscriptions")
+    public ResponseEntity<List<SubscriptionListDto>> getAll(@RequestAttribute("user")UserDto userDto) throws UserNotFoundException {
 
-        return new ResponseEntity<>(subscriptionService.getAllSubscriptions(userId), HttpStatus.OK);
+        return new ResponseEntity<>(subscriptionService.getAllSubscriptions(userDto.getUsername()), HttpStatus.OK);
     }
 
-    @GetMapping("/profile/subscription/{userId}/{id}")
-    public ResponseEntity<SubscriptionDto> getSubscription(@PathVariable long userId, @PathVariable long id) throws UserNotFoundException, SubscriptionNotFoundException {
-        return new ResponseEntity<>(subscriptionService.getSubscription(userId, id), HttpStatus.OK);
+    @GetMapping("/profile/subscription/{id}")
+    public ResponseEntity<SubscriptionDto> getSubscription(@RequestAttribute("user")UserDto userDto, @PathVariable long id) throws UserNotFoundException, SubscriptionNotFoundException {
+        return new ResponseEntity<>(subscriptionService.getSubscription(userDto.getUsername(), id), HttpStatus.OK);
     }
 
-    @PostMapping("/profile/subscriptions/{userId}")
-    public ResponseEntity<SubscriptionDto> createSubscription(@PathVariable long userId,@RequestBody SubscriptionDto dto) throws SubscriptionMaxCountException, MingreaterthanMaxException {
-        return new ResponseEntity<>(subscriptionService.createSubscription(userId,dto),HttpStatus.OK);
+    @PostMapping("/profile/subscriptions")
+    public ResponseEntity<SubscriptionDto> createSubscription(@RequestAttribute("user")UserDto userDto,@RequestBody SubscriptionDto dto) throws SubscriptionMaxCountException, MingreaterthanMaxException {
+        return new ResponseEntity<>(subscriptionService.createSubscription(userDto.getUsername(),dto),HttpStatus.OK);
     }
-    @PutMapping("/profile/subscriptions/{userId}/{id}")
-    public ResponseEntity<SubscriptionDto> updateSubscription(@PathVariable long userId,@PathVariable long id,@RequestBody SubscriptionDto dto) throws UserNotFoundException, SubscriptionNotFoundException, MingreaterthanMaxException {
-        return new ResponseEntity<>(subscriptionService.updateSubscription(userId,id,dto),HttpStatus.OK);
+    @PutMapping("/profile/subscriptions/{id}")
+    public ResponseEntity<SubscriptionDto> updateSubscription(@RequestAttribute("user")UserDto userDto,@PathVariable long id,@RequestBody SubscriptionDto dto) throws UserNotFoundException, SubscriptionNotFoundException, MingreaterthanMaxException {
+        return new ResponseEntity<>(subscriptionService.updateSubscription(userDto.getUsername(),id,dto),HttpStatus.OK);
     }
 }

@@ -33,10 +33,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         this.cityRepository = cityRepository;
     }
     @Override
-    public SubscriptionDto createSubscription(Long userId, SubscriptionDto subscriptionDto) throws SubscriptionMaxCountException, MingreaterthanMaxException {
-        User user = userRepository.findById(userId).get();
+    public SubscriptionDto createSubscription(String username, SubscriptionDto subscriptionDto) throws SubscriptionMaxCountException, MingreaterthanMaxException {
+        User user = userRepository.findUserByUsername(username);
         List<Subscription> subscriptions=subscriptionRepository.findAll().stream()
-                .filter(s->s.getUser().getId()==userId).collect(Collectors.toList());
+                .filter(s->s.getUser().getUsername().trim().toLowerCase().equals(username.trim().toLowerCase())).collect(Collectors.toList());
         if (subscriptions.size() < 5) {
             if(subscriptionDto.getMinMileage()<=subscriptionDto.getMaxMileage()
                     &&  subscriptionDto.getMinPrice()<=subscriptionDto.getMaxPrice()
@@ -55,12 +55,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDto updateSubscription(Long userId, Long subscriptionId, SubscriptionDto subscriptionDto) throws SubscriptionNotFoundException, UserNotFoundException, MingreaterthanMaxException {
+    public SubscriptionDto updateSubscription(String username, Long subscriptionId, SubscriptionDto subscriptionDto) throws SubscriptionNotFoundException, UserNotFoundException, MingreaterthanMaxException {
 
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findUserByUsername(username);
         if (user == null) throw new UserNotFoundException("User is not found");
         List<Subscription> subscriptions=subscriptionRepository.findAll().stream()
-                .filter(s->s.getUser().getId()==userId).collect(Collectors.toList());
+                .filter(s->s.getUser().getUsername().trim().toLowerCase().equals(username.trim().toLowerCase())).collect(Collectors.toList());
         Subscription subscription = subscriptions.stream()
                 .filter(s -> s.getId() == subscriptionId).findAny().get();
         if (subscription == null) throw new SubscriptionNotFoundException("This subscription is not found");
@@ -78,11 +78,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public void deleteSubscription(Long userId, Long id) throws SubscriptionNotFoundException, UserNotFoundException {
-        User user = userRepository.findById(userId).get();
+    public void deleteSubscription(String username, Long id) throws SubscriptionNotFoundException, UserNotFoundException {
+        User user = userRepository.findUserByUsername(username);
         if (user == null) throw new UserNotFoundException("This user not found");
         List<Subscription> subscriptions=subscriptionRepository.findAll().stream()
-                .filter(s->s.getUser().getId()==userId).collect(Collectors.toList());
+                .filter(s->s.getUser().getUsername().trim().toLowerCase().equals(username.trim().toLowerCase())).collect(Collectors.toList());
         Optional<Subscription> subscription = subscriptions.stream()
                 .filter(s -> s.getId() == id).findAny();
         if (subscription.get() == null) throw new SubscriptionNotFoundException("This subscription is not found");
@@ -90,14 +90,14 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public List<SubscriptionListDto> getAllSubscriptions(Long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).get();
+    public List<SubscriptionListDto> getAllSubscriptions(String username) throws UserNotFoundException {
+        User user = userRepository.findUserByUsername(username);
         System.out.println("AAAAAAAAAAAAAA");
         System.out.println(user);
         if (user == null) throw new UserNotFoundException("This user not found");
         List<SubscriptionListDto> subscriptionListDtos = new ArrayList<>();
         List<Subscription> subscriptions=subscriptionRepository.findAll().stream()
-                .filter(s->s.getUser().getId()==userId).collect(Collectors.toList());
+                .filter(s->s.getUser().getUsername().trim().toLowerCase().equals(username.trim().toLowerCase())).collect(Collectors.toList());
         for (Subscription subscription : subscriptions) {
             subscriptionListDtos.add(new SubscriptionListDto(subscription));
         }
@@ -105,10 +105,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDto getSubscription(Long userId, Long id) throws SubscriptionNotFoundException, UserNotFoundException {
-        User user = userRepository.findById(userId).get();
+    public SubscriptionDto getSubscription(String username, Long id) throws SubscriptionNotFoundException, UserNotFoundException {
+        User user = userRepository.findUserByUsername(username);
         List<Subscription> subscriptions=subscriptionRepository.findAll().stream()
-                .filter(s->s.getUser().getId()==userId).collect(Collectors.toList());
+                .filter(s->s.getUser().getUsername().toLowerCase().trim().equals(username.toLowerCase().trim())).collect(Collectors.toList());
         if (user == null) throw new UserNotFoundException("This user not found");
 
         Optional<Subscription> subscription = subscriptions.stream()
