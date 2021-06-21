@@ -45,8 +45,7 @@ public class Listing {
     private String description;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<CarSpecification> carSpecifications;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listing")
     private List<Image> images;
     private boolean isActive;
     private LocalDateTime updatedAt;

@@ -76,4 +76,10 @@ public class DtoHelper {
         transaction.setDeleted(dto.isDeleted());
         return transaction;
     }
+
+    public static List<ImageDto> convertImagestoImageDtos(List<Image> images){
+        List<ImageDto> imageDtos = new ArrayList<>();
+        images.forEach(i -> imageDtos.add(new ImageDto(i)));
+        return imageDtos;
+    }
 }

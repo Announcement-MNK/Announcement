@@ -12,10 +12,12 @@ import com.example.turboaz.models.User;
 import com.example.turboaz.repositories.ListingRepository;
 import com.example.turboaz.repositories.TransactionRepository;
 import com.example.turboaz.repositories.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TransactionServiceImpl implements TransactionService {
     UserRepository userRepository;
     TransactionRepository transactionRepository;
