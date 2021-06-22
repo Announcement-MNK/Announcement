@@ -1,7 +1,11 @@
 package com.example.turboaz.services;
 
+import com.example.turboaz.dtos.MakeDto;
+import com.example.turboaz.dtos.ModelDto;
 import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.FuelType;
+import com.example.turboaz.exceptions.AmountGreaterThanZeroException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.models.City;
 import com.example.turboaz.models.Make;
 import com.example.turboaz.models.Model;
@@ -11,10 +15,13 @@ import com.example.turboaz.repositories.MakeRepository;
 import com.example.turboaz.repositories.ModelRepository;
 import com.example.turboaz.repositories.UserRepository;
 import com.google.api.client.util.Lists;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class SearchCollectionServiceImpl implements SearchCollectionService {
     MakeRepository makeRepository;
     ModelRepository modelRepository;
@@ -30,14 +37,17 @@ public class SearchCollectionServiceImpl implements SearchCollectionService {
     }
 
     @Override
-    public List<Model> getModelsByMakeId(Long makeId) {
-
-        return modelRepository.getAllByMakeId(makeId);
+    public List<ModelDto> getModelsByMakeId(Long makeId) {
+        List<ModelDto> modelDtos=new ArrayList<>();
+        modelRepository.getAllByMakeId(makeId).forEach(m->modelDtos.add(new ModelDto(m)));
+        return modelDtos;
     }
 
     @Override
-    public List<Make> getMakes() {
-        return Lists.newArrayList(makeRepository.findAll());
+    public List<MakeDto> getMakes() {
+        List<MakeDto> makeDtos=new ArrayList<>();
+        makeRepository.findAll().forEach(m->makeDtos.add(new MakeDto(m)));
+        return Lists.newArrayList(makeDtos);
     }
 
     @Override
@@ -62,9 +72,15 @@ public class SearchCollectionServiceImpl implements SearchCollectionService {
     }
 
     @Override
-    public double increaseWallet(String username, double amount) {
-        User user = userRepository.findUserByUsername(username);
-        user.setBalance(amount);
-        return user.getBalance();
+    public double increaseWallet(String username, double amount) throws AmountGreaterThanZeroException, UserNotFoundException {
+        if (amount>0){
+            User user = userRepository.findUserByUsername(username);
+            if(user==null) throw new UserNotFoundException("This user not found");
+            user.setBalance(user.getBalance()+amount);
+            return user.getBalance();
+        }else{
+            throw new AmountGreaterThanZeroException("Amount must greater than 0");
+        }
+
     }
 }
