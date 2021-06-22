@@ -21,8 +21,6 @@ public class EmailServiceImpl implements EmailService{
         mail.setFrom("example@gmail.com");
         mail.setSubject(subject);
         mail.setText(text);
-
         javaMailSender.send(mail);
-
     }
 }

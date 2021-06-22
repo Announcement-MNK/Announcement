@@ -1,10 +1,9 @@
 package com.example.turboaz.services;
 
-import com.example.turboaz.dtos.ListingCreationDto;
-import com.example.turboaz.dtos.ListingGetDto;
-import com.example.turboaz.dtos.ListingListDto;
+import com.example.turboaz.dtos.*;
 import com.example.turboaz.enums.ListingType;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.models.*;
 import com.example.turboaz.repositories.*;
 import com.example.turboaz.helpers.DtoHelper;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.example.turboaz.helpers.PagingHelper.preparePage;
 
@@ -30,17 +28,20 @@ public class ListingServiceImpl implements  ListingService{
     ModelRepository modelRepository;
     UserRepository userRepository;
     CarSpecificationRepository carSpecificationRepository;
+    TransactionService transactionService;
 
     public ListingServiceImpl(ListingRepository listingRepository,
                               CityRepository cityRepository,
                               ModelRepository modelRepository,
                               UserRepository userRepository,
-                              CarSpecificationRepository carSpecificationRepository){
+                              CarSpecificationRepository carSpecificationRepository,
+                              TransactionService transactionService){
         this.listingRepository = listingRepository;
         this.cityRepository = cityRepository;
         this.modelRepository = modelRepository;
         this.userRepository = userRepository;
         this.carSpecificationRepository = carSpecificationRepository;
+        this.transactionService = transactionService;
     }
 
     @Override
@@ -98,19 +99,23 @@ public class ListingServiceImpl implements  ListingService{
     }
 
     @Override
-    public void makeVip(Long id) throws ListingNotFoundException {
+    public void makeVip(String username, Long id) throws ListingNotFoundException, UserNotFoundException {
+        User user = userRepository.findUserByUsername(username); //TODO
         Optional<Listing> listing = listingRepository.findById(id);
         if (listing == null) throw new ListingNotFoundException("Can't find such listing");
         listing.get().setType(ListingType.VIP);
         listingRepository.save(listing.get());
+        transactionService.createTransaction(user.getId(), new TransactionPostDto(id, ListingType.VIP.getAmount()));
     }
 
     @Override
-    public void makePaid(Long id) throws ListingNotFoundException {
+    public void makePaid(String username, Long id) throws ListingNotFoundException, UserNotFoundException {
+        User user = userRepository.findUserByUsername(username); //TODO
         Optional<Listing> listing = listingRepository.findById(id);
         if (listing == null) throw new ListingNotFoundException("Can't find such listing");
         listing.get().setType(ListingType.PAID);
         listingRepository.save(listing.get());
+        transactionService.createTransaction(user.getId(), new TransactionPostDto(id, ListingType.PAID.getAmount()));
     }
 
     @Override

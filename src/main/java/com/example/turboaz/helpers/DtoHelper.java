@@ -3,8 +3,8 @@ package com.example.turboaz.helpers;
 import com.example.turboaz.dtos.*;
 import com.example.turboaz.enums.*;
 import com.example.turboaz.models.*;
-import org.dom4j.rule.Mode;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,13 +69,13 @@ public class DtoHelper {
         subscriptions.forEach(s -> subscriptionListDtos.add(new SubscriptionListDto(s)));
         return subscriptionListDtos;
     }
-    public static Transaction convertTransactionDtoToEntity(TransactionDto dto, User user,Listing listing){
+    public static Transaction convertTransactionDtoToEntity(TransactionPostDto dto, User user, Listing listing){
         Transaction transaction = new Transaction();
         transaction.setAmount(dto.getAmount());
         transaction.setUser(user);
         transaction.setListing(listing);
-        transaction.setCreatedAt(dto.getCreatedAt());
-        transaction.setDeleted(dto.isDeleted());
+        transaction.setCreatedAt(LocalDateTime.now());
+        transaction.setDeleted(false);
         return transaction;
     }
 

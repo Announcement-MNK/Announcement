@@ -7,6 +7,7 @@ import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.FuelType;
 import com.example.turboaz.enums.Loan;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.models.Listing;
 import com.example.turboaz.utils.Paging;
 import org.springframework.data.domain.Page;
@@ -57,7 +58,7 @@ public interface ListingService {
      * @param id
      * @throws ListingNotFoundException
      */
-    void makeVip(Long id) throws ListingNotFoundException;
+    void makeVip(String username, Long id) throws ListingNotFoundException, UserNotFoundException;
 
 
     /**
@@ -65,7 +66,7 @@ public interface ListingService {
      * @param id
      * @throws ListingNotFoundException
      */
-    void makePaid(Long id) throws ListingNotFoundException;
+    void makePaid(String username, Long id) throws ListingNotFoundException, UserNotFoundException;
 
 
     Paging<ListingListDto> search(Specification<Listing> spec, Integer size, Integer index);
