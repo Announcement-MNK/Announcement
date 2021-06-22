@@ -3,12 +3,10 @@ package com.example.turboaz.controllers;
 import com.example.turboaz.dtos.*;
 import com.example.turboaz.exceptions.ImageNotFoundException;
 import com.example.turboaz.exceptions.ListingNotFoundException;
-import com.example.turboaz.services.FileServiceImpl;
-import com.example.turboaz.services.ImageService;
-import com.example.turboaz.services.ListingService;
-import com.example.turboaz.services.TransactionService;
+import com.example.turboaz.services.*;
 import com.example.turboaz.utils.Paging;
 import javassist.tools.web.BadHttpRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,6 @@ public class ListingController {
     ListingService service;
     ImageService imageService;
     TransactionService transactionService;
-
 
     public ListingController(ListingService service,
                              ImageService imageService,
