@@ -29,4 +29,10 @@ public interface ListingRepository extends PagingAndSortingRepository<Listing, L
             , boolean hasCash , boolean hasLoan, boolean hasLease , long makeId, int maxPrice, int minPrice, double maxMileage, double minMileage, int maxYear, int minYear, long modelId);
 
     Listing findListingByUserIdAndId(Long userId, Long id);
+
+    @Query(value = "SELECT l FROM Listing l WHERE l.updated_at + INTERVAL '1 MONTH' < now()", nativeQuery = true)
+    List<Listing> findAllExpired();
+
+    @Query(value = "SELECT l FROM Listing l WHERE l.updated_at + INTERVAL '1 MONTH' = now() + INTERVAL '1 DAY'", nativeQuery = true)
+    List<Listing> findAllTomorrowExpired();
 }

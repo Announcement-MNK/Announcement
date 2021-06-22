@@ -16,40 +16,40 @@ import java.util.List;
  * Get all the data for search
  */
 public interface SearchCollectionService {
-    /**
+    /** gets models by make id
      * @param makeId
      * @return List<Model>
      */
     List<ModelDto> getModelsByMakeId(Long makeId);
 
-    /**
+    /** gets all makes
      * @return List<Make>
      */
 
     Iterable<MakeDto> getMakes();
 
-    /**
+    /** gets all fuel types
      * @return List<FuelType>
      */
     List<FuelType> getFuelTypes();
 
-    /**
+    /** gets all body types
      * @return List<BodyType>
      */
     List<BodyType> getBodyTypes();
 
-    /**
+    /** gets all cities
      * @return List<City>
      */
     List<City> getCities();
 
-    /**
+    /** gets user wallet
      * @param username
      * @return double
      */
     double getWallet(String username);
 
-    /**
+    /** increases amount of user wallet
      * @param username
      * @param amount
      * @return double

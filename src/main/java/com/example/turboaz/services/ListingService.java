@@ -7,11 +7,13 @@ import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.FuelType;
 import com.example.turboaz.enums.Loan;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.models.Listing;
 import com.example.turboaz.utils.Paging;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -42,6 +44,18 @@ public interface ListingService {
     Paging<ListingListDto> getAllListings(int index, int size, String sortBy);
 
     /**
+     * gets all expired listings
+     * @return
+     */
+//    List<Listing> getAllExpiredListings();
+
+    /**
+     * gets all listings will expire tomorrow
+     * @return
+     */
+//    List<Listing> getAllTomorrowExpiredListings();
+
+    /**
      * @return listingListDto
      */
     Paging<ListingListDto> getUserListings(String username, int index, int size, String sortBy);
@@ -57,7 +71,7 @@ public interface ListingService {
      * @param id
      * @throws ListingNotFoundException
      */
-    void makeVip(Long id) throws ListingNotFoundException;
+    void makeVip(String username, Long id) throws ListingNotFoundException, UserNotFoundException;
 
 
     /**
@@ -65,7 +79,7 @@ public interface ListingService {
      * @param id
      * @throws ListingNotFoundException
      */
-    void makePaid(Long id) throws ListingNotFoundException;
+    void makePaid(String username, Long id) throws ListingNotFoundException, UserNotFoundException;
 
 
     Paging<ListingListDto> search(Specification<Listing> spec, Integer size, Integer index);

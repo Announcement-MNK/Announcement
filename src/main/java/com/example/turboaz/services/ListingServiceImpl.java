@@ -1,10 +1,9 @@
 package com.example.turboaz.services;
 
-import com.example.turboaz.dtos.ListingCreationDto;
-import com.example.turboaz.dtos.ListingGetDto;
-import com.example.turboaz.dtos.ListingListDto;
+import com.example.turboaz.dtos.*;
 import com.example.turboaz.enums.ListingType;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.models.*;
 import com.example.turboaz.repositories.*;
 import com.example.turboaz.helpers.DtoHelper;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.example.turboaz.helpers.PagingHelper.preparePage;
 
@@ -31,32 +29,39 @@ public class ListingServiceImpl implements ListingService {
     ModelRepository modelRepository;
     UserRepository userRepository;
     CarSpecificationRepository carSpecificationRepository;
-    SubscriptionRepository subscriptionRepository;
+    TransactionService transactionService;
+    EmailService emailService;
 
+//1	0	1	0	t	t	t	122	120	2021	10	1	2000	1	1	1	1
     public ListingServiceImpl(ListingRepository listingRepository,
                               CityRepository cityRepository,
                               ModelRepository modelRepository,
                               UserRepository userRepository,
                               CarSpecificationRepository carSpecificationRepository,
-                              SubscriptionRepository subscriptionRepository) {
+                              TransactionService transactionService,
+                              EmailService emailService) {
         this.listingRepository = listingRepository;
         this.cityRepository = cityRepository;
         this.modelRepository = modelRepository;
         this.userRepository = userRepository;
         this.carSpecificationRepository = carSpecificationRepository;
-        this.subscriptionRepository = subscriptionRepository;
+        this.transactionService = transactionService;
+        this.emailService = emailService;
+
     }
+
 
     @Override
     public ListingGetDto createListing(String username, ListingCreationDto listingCreateDto) {
         Listing listing = convertToEntity(username, listingCreateDto);
-
-        List<Subscription> subscription = subscriptionRepository.findAll();
         List<Subscription> subscriptions = listingRepository.getSubscriptionForEmail(listing.getColor(), listing.getBodyType()
                 , listing.getCity().getId(), listing.getFuelType(), listing.isCashOption(), listing.isCashOption()
                 , listing.isLeaseOption(), listing.getModel().getMake().getId(), listing.getPrice()
                 , listing.getPrice(), listing.getMileage(), listing.getMileage(), listing.getYear(), listing.getYear(), listing.getModel().getId());
         System.out.println(subscriptions);
+        for (Subscription s : subscriptions) {
+            emailService.sendMail(s.getUser().getEmail(),"Salam","Axtardighin elan geldi");
+        }
         return new ListingGetDto(listingRepository.save(listing));
     }
 
@@ -90,6 +95,16 @@ public class ListingServiceImpl implements ListingService {
                 .build();
     }
 
+//    @Override
+//    public List<Listing> getAllExpiredListings() {
+//        return listingRepository.findAllExpired();
+//    }
+//
+//    @Override
+//    public List<Listing> getAllTomorrowExpiredListings() {
+//        return listingRepository.findAllTomorrowExpired();
+//    }
+
     @Override
     public Paging<ListingListDto> getUserListings(String username, int index, int size, String sortBy) {
         Pageable paging = preparePage(index, size, sortBy);
@@ -109,19 +124,23 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public void makeVip(Long id) throws ListingNotFoundException {
+    public void makeVip(String username, Long id) throws ListingNotFoundException, UserNotFoundException {
+        User user = userRepository.findUserByUsername(username); //TODO
         Optional<Listing> listing = listingRepository.findById(id);
         if (listing == null) throw new ListingNotFoundException("Can't find such listing");
         listing.get().setType(ListingType.VIP);
         listingRepository.save(listing.get());
+        transactionService.createTransaction(user.getId(), new TransactionPostDto(id, ListingType.VIP.getAmount()));
     }
 
     @Override
-    public void makePaid(Long id) throws ListingNotFoundException {
+    public void makePaid(String username, Long id) throws ListingNotFoundException, UserNotFoundException {
+        User user = userRepository.findUserByUsername(username); //TODO
         Optional<Listing> listing = listingRepository.findById(id);
         if (listing == null) throw new ListingNotFoundException("Can't find such listing");
         listing.get().setType(ListingType.PAID);
         listingRepository.save(listing.get());
+        transactionService.createTransaction(user.getId(), new TransactionPostDto(id, ListingType.PAID.getAmount()));
     }
 
     @Override

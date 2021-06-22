@@ -3,6 +3,7 @@ package com.example.turboaz.controllers;
 import com.example.turboaz.dtos.*;
 import com.example.turboaz.exceptions.ImageNotFoundException;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.services.*;
 import com.example.turboaz.utils.Paging;
 import javassist.tools.web.BadHttpRequest;
@@ -109,8 +110,9 @@ public class ListingController {
      * @throws ListingNotFoundException
      */
     @PutMapping("/listings/{id}/makevip")
-    public ResponseEntity makeVip(@PathVariable Long id) throws ListingNotFoundException {
-        service.makeVip(id);
+    public ResponseEntity makeVip(@RequestAttribute("user") UserDto userDto,
+                                  @PathVariable Long id) throws ListingNotFoundException, UserNotFoundException {
+        service.makeVip(userDto.getUsername(), id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -122,8 +124,9 @@ public class ListingController {
      * @throws ListingNotFoundException
      */
     @PutMapping("/listings/{id}/makepaid")
-    public ResponseEntity makePaid(@PathVariable Long id) throws ListingNotFoundException {
-        service.makePaid(id);
+    public ResponseEntity makePaid(@RequestAttribute("user") UserDto userDto,
+                                   @PathVariable Long id) throws ListingNotFoundException, UserNotFoundException {
+        service.makePaid(userDto.getUsername(), id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
