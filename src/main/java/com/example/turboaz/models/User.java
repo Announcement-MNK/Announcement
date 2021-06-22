@@ -1,5 +1,6 @@
 package com.example.turboaz.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,6 @@ public class User {
     private double balance;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Transaction> transactionList;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
-    private List<Subscription> subscriptions;
+//    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+//    private List<Subscription> subscriptions;
 }

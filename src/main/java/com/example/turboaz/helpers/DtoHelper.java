@@ -53,6 +53,8 @@ public class DtoHelper {
         subscription.setMinPrice(dto.getMinPrice());
         subscription.setMaxPrice(dto.getMaxPrice());
         subscription.setMake(make);
+        subscription.setMaxMileage(dto.getMaxMileage());
+        subscription.setMinMileage(dto.getMinMileage());
         subscription.setHasLoan(dto.isLoanOption());
         subscription.setHasCash(dto.isCashOption());
         subscription.setHasLease(dto.isLeaseOption());
@@ -75,5 +77,11 @@ public class DtoHelper {
         transaction.setCreatedAt(dto.getCreatedAt());
         transaction.setDeleted(dto.isDeleted());
         return transaction;
+    }
+
+    public static List<ImageDto> convertImagestoImageDtos(List<Image> images){
+        List<ImageDto> imageDtos = new ArrayList<>();
+        images.forEach(i -> imageDtos.add(new ImageDto(i)));
+        return imageDtos;
     }
 }

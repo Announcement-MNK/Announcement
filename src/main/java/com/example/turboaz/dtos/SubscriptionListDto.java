@@ -1,10 +1,12 @@
 package com.example.turboaz.dtos;
 
 import com.example.turboaz.models.Subscription;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 public class SubscriptionListDto {
     private long subId;
     private String name;
@@ -28,6 +30,7 @@ public class SubscriptionListDto {
     private List<CarSpecDto> specs;
 
     public SubscriptionListDto(Subscription subscription) {
+        this.subId = subscription.getId();
         this.name = subscription.getUser().getFullName();
         this.make = new MakeDto(subscription.getMake());
         this.model = new ModelDto(subscription.getModel());

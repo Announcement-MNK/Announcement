@@ -113,7 +113,6 @@ public class ListingServiceImpl implements  ListingService{
         listingRepository.save(listing.get());
     }
 
-
     @Override
     public Paging<ListingListDto> search(Specification<Listing> spec, Integer size, Integer index) {
         Pageable paging = preparePage(index - 1, size, "id");

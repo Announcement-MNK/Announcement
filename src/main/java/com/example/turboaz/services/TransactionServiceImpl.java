@@ -1,8 +1,6 @@
 package com.example.turboaz.services;
 
 import com.example.turboaz.dtos.TransactionDto;
-import com.example.turboaz.enums.TransactionPurpose;
-import com.example.turboaz.enums.TransactionType;
 import com.example.turboaz.exceptions.ListingNotFoundException;
 import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.helpers.DtoHelper;
@@ -12,10 +10,12 @@ import com.example.turboaz.models.User;
 import com.example.turboaz.repositories.ListingRepository;
 import com.example.turboaz.repositories.TransactionRepository;
 import com.example.turboaz.repositories.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TransactionServiceImpl implements TransactionService {
     UserRepository userRepository;
     TransactionRepository transactionRepository;
@@ -29,6 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (listing == null) throw new ListingNotFoundException("This listing not found");
 
         Transaction transaction = DtoHelper.convertTransactionDtoToEntity(dto,user,listing);
+        userRepository.updateUserBalance(userId,(user.getBalance() - transaction.getAmount()));
         transactionRepository.save(transaction);
         return dto;
     }
@@ -52,5 +53,6 @@ public class TransactionServiceImpl implements TransactionService {
         Listing listing = listingRepository.findById(listingId).get();
         if (listing == null) throw new ListingNotFoundException("This listing not found");
         transactionRepository.softDeleteTransaction(true,transactionId,user,listing);
+        userRepository.updateUserBalance(userId,(user.getBalance()+transactionRepository.findById(transactionId).get().getAmount()));
     }
 }
