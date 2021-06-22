@@ -20,7 +20,7 @@ public class SchedulerUtil {
     public static Trigger buildTrigger(Class<? extends Job> jobClass) {
         SimpleScheduleBuilder builder = SimpleScheduleBuilder
                 .simpleSchedule()
-                .withIntervalInSeconds(10);
+                .withIntervalInHours(10);
         builder = builder.repeatForever();
 
         return TriggerBuilder.newTrigger()
