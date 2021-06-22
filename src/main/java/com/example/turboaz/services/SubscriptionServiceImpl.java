@@ -92,8 +92,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public List<SubscriptionListDto> getAllSubscriptions(String username) throws UserNotFoundException {
         User user = userRepository.findUserByUsername(username);
-        System.out.println("AAAAAAAAAAAAAA");
-        System.out.println(user);
         if (user == null) throw new UserNotFoundException("This user not found");
         List<SubscriptionListDto> subscriptionListDtos = new ArrayList<>();
         List<Subscription> subscriptions=subscriptionRepository.findAll().stream()

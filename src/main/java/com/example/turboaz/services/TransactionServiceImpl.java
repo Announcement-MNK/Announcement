@@ -1,6 +1,7 @@
 package com.example.turboaz.services;
 
-import com.example.turboaz.dtos.TransactionDto;
+import com.example.turboaz.dtos.TransactionPostDto;
+import com.example.turboaz.dtos.TransactionResponseDto;
 import com.example.turboaz.exceptions.ListingNotFoundException;
 import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.helpers.DtoHelper;
@@ -20,28 +21,35 @@ public class TransactionServiceImpl implements TransactionService {
     UserRepository userRepository;
     TransactionRepository transactionRepository;
     ListingRepository listingRepository;
-    @Override
-    public TransactionDto createTransaction(long userId, long listingId, TransactionDto dto) throws UserNotFoundException,ListingNotFoundException{
-        User user = userRepository.findById(userId).get();
-        if (user == null) throw new UserNotFoundException("This user not found");
 
-        Listing listing = listingRepository.findById(listingId).get();
-        if (listing == null) throw new ListingNotFoundException("This listing not found");
-
-        Transaction transaction = DtoHelper.convertTransactionDtoToEntity(dto,user,listing);
-        userRepository.updateUserBalance(userId,(user.getBalance() - transaction.getAmount()));
-        transactionRepository.save(transaction);
-        return dto;
+    public TransactionServiceImpl(UserRepository userRepository,
+            TransactionRepository transactionRepository,
+            ListingRepository listingRepository){
+        this.userRepository = userRepository;
+        this.listingRepository = listingRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
-    public List<TransactionDto> getAllTransactions(long userId, long listingId) throws UserNotFoundException, ListingNotFoundException {
+    public TransactionResponseDto createTransaction(long userId, TransactionPostDto dto) throws UserNotFoundException,ListingNotFoundException{
+        User user = userRepository.findById(userId).get();
+        if (user == null) throw new UserNotFoundException("This user not found");
+        Listing listing = listingRepository.findById(dto.getListingId()).get();
+        if (listing == null) throw new ListingNotFoundException("This listing not found");
+        Transaction transaction = DtoHelper.convertTransactionDtoToEntity(dto,user,listing);
+        transactionRepository.save(transaction);
+        userRepository.updateUserBalance(userId,(user.getBalance() - transaction.getAmount()));
+        return new TransactionResponseDto(transaction);
+    }
+
+    @Override
+    public List<TransactionResponseDto> getAllTransactions(long userId, long listingId) throws UserNotFoundException, ListingNotFoundException {
         User user = userRepository.findById(userId).get();
         if (user == null) throw new UserNotFoundException("This user not found");
 
-        List<TransactionDto> transactionDtoList = new ArrayList<>();
+        List<TransactionResponseDto> transactionDtoList = new ArrayList<>();
         for (Transaction transaction : user.getTransactionList()){
-            transactionDtoList.add(new TransactionDto(transaction));
+            transactionDtoList.add(new TransactionResponseDto(transaction));
         }
         return transactionDtoList;
     }

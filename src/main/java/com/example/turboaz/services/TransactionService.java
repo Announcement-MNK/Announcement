@@ -1,8 +1,7 @@
 package com.example.turboaz.services;
 
-import com.example.turboaz.dtos.TransactionDto;
-import com.example.turboaz.enums.TransactionPurpose;
-import com.example.turboaz.enums.TransactionType;
+import com.example.turboaz.dtos.TransactionPostDto;
+import com.example.turboaz.dtos.TransactionResponseDto;
 import com.example.turboaz.exceptions.ListingNotFoundException;
 import com.example.turboaz.exceptions.UserNotFoundException;
 
@@ -12,13 +11,12 @@ public interface TransactionService {
     /**
      * Create new transaction
      * @param userId
-     * @param listingId
      * @param transactionDto
      * @return
      * @throws UserNotFoundException
      * @throws ListingNotFoundException
      */
-    TransactionDto createTransaction(long userId, long listingId, TransactionDto transactionDto) throws UserNotFoundException, ListingNotFoundException;
+    TransactionResponseDto createTransaction(long userId, TransactionPostDto transactionDto) throws UserNotFoundException, ListingNotFoundException;
 
     /**
      * Search for all user's transactions
@@ -28,7 +26,7 @@ public interface TransactionService {
      * @throws UserNotFoundException
      * @throws ListingNotFoundException
      */
-    List<TransactionDto> getAllTransactions(long userId, long listingId) throws UserNotFoundException, ListingNotFoundException;
+    List<TransactionResponseDto> getAllTransactions(long userId, long listingId) throws UserNotFoundException, ListingNotFoundException;
 
     /**
      * soft deleting transaction, just making it unavailable
