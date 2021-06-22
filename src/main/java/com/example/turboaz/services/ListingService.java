@@ -7,8 +7,10 @@ import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.FuelType;
 import com.example.turboaz.enums.Loan;
 import com.example.turboaz.exceptions.ListingNotFoundException;
+import com.example.turboaz.models.Listing;
 import com.example.turboaz.utils.Paging;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -65,29 +67,7 @@ public interface ListingService {
      */
     void makePaid(Long id) throws ListingNotFoundException;
 
-    /**
-     *
-     * @param makeId
-     * @param modelId
-     * @param cityId
-     * @param minYear
-     * @param maxYear
-     * @param minPrice
-     * @param maxPrice
-     * @param minMillage
-     * @param maxMillage
-     * @param fuelType
-     * @param loan
-     * @param bodyType
-     * @param gearbox
-     * @param transactionType
-     * @param specIds
-     * @param color
-     * @return List<ListingGetDto>
-     */
-    List<ListingGetDto> search(Long makeId, Long modelId, Long cityId, Integer minYear, Integer maxYear,
-                               Integer minPrice, Integer maxPrice, Integer minMillage, Integer maxMillage,
-                               String fuelType, String loan, String bodyType, String gearbox, String transactionType,
-                               List<Long> specIds, String color);
+
+    Paging<ListingListDto> search(Specification<Listing> spec, Integer size, Integer index);
 
 }

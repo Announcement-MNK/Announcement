@@ -12,11 +12,15 @@ import com.example.turboaz.utils.Paging;
 import com.example.turboaz.helpers.PagingHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.example.turboaz.helpers.PagingHelper.preparePage;
 
 @Service
 public class ListingServiceImpl implements  ListingService{
@@ -66,7 +70,7 @@ public class ListingServiceImpl implements  ListingService{
 
     @Override
     public Paging<ListingListDto> getAllListings(int index, int size, String sortBy) {
-        Pageable paging = PagingHelper.preparePage(index-1, size, sortBy);
+        Pageable paging = preparePage(index-1, size, sortBy);
         Page<Listing> listings =  listingRepository.findAll(paging);
         return new Paging<ListingListDto>().toBuilder()
                 .pageCount((long) listings.getTotalPages())
@@ -77,7 +81,7 @@ public class ListingServiceImpl implements  ListingService{
 
     @Override
     public Paging<ListingListDto> getUserListings(String username, int index, int size, String sortBy) {
-        Pageable paging = PagingHelper.preparePage(index, size, sortBy);
+        Pageable paging = preparePage(index, size, sortBy);
         Page<Listing> listings =  listingRepository.findListingsByUsername(username, paging);
         return new Paging<ListingListDto>().toBuilder()
                 .pageCount((long) listings.getTotalPages())
@@ -109,10 +113,15 @@ public class ListingServiceImpl implements  ListingService{
         listingRepository.save(listing.get());
     }
 
-    //TODO FINISH SEARCH
     @Override
-    public List<ListingGetDto> search(Long makeId, Long modelId, Long cityId, Integer minYear, Integer maxYear, Integer minPrice, Integer maxPrice, Integer minMillage, Integer maxMillage, String fuelType, String loan, String bodyType, String gearbox, String transactionType, List<Long> specIds, String color) {
-        return null;
+    public Paging<ListingListDto> search(Specification<Listing> spec, Integer size, Integer index) {
+        Pageable paging = preparePage(index - 1, size, "id");
+        Page<Listing> listings = listingRepository.findAll(spec, paging);
+        return new Paging<ListingListDto>().toBuilder()
+                .pageCount((long) listings.getTotalPages())
+                .pageSize(listings.getTotalElements())
+                .items(DtoHelper.convertToListingListDto(PagingHelper.getResult(listings)))
+                .build();
     }
 
     public Listing convertToEntity(String username, ListingCreationDto listingCreateDto){

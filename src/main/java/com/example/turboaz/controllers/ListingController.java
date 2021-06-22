@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import static com.example.turboaz.utils.SpecificationUtil.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -120,6 +121,43 @@ public class ListingController {
     public ResponseEntity makePaid(@PathVariable Long id) throws ListingNotFoundException {
         service.makePaid(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/listings/search")
+    public ResponseEntity<Paging<ListingListDto>> get(
+            @RequestParam(required = false) String make,
+            @RequestParam(required = false) String model,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) Integer minYear,
+            @RequestParam(required = false) Integer maxYear,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) Integer minMileage,
+            @RequestParam(required = false) Integer maxMileage,
+            @RequestParam(required = false) String fuelType,
+            @RequestParam(required = false) String bodyType,
+            @RequestParam(required = false) Boolean loanOption,
+            @RequestParam(required = false) Boolean barterOption,
+            @RequestParam(required = false) Boolean leaseOption,
+            @RequestParam(required = false) Boolean cashOption,
+            @RequestParam(required = false, defaultValue = "10") Integer size,
+            @RequestParam(required = false, defaultValue = "1") Integer index
+    ) {
+        return new ResponseEntity<>(service.search(sameMake(make)
+                        .and(sameModel(model))
+                        .and(sameLocation(location))
+                        .and(betweenYears(minYear, maxYear))
+                        .and(betweenPrice(minPrice, maxPrice))
+                        .and(betweenMileage(minMileage, maxMileage))
+                        .and(sameFuelType(fuelType))
+                        .and(sameBodyType(bodyType))
+                        .and(hasCreditOption(loanOption))
+                        .and(hasBarterOption(barterOption))
+                        .and(hasLeaseOption(leaseOption))
+                        .and(hasCashOption(cashOption)),
+                size,
+                index
+        ), HttpStatus.OK);
     }
 
     @PostMapping("/listings/{id}/image")
