@@ -1,7 +1,11 @@
 package com.example.turboaz.services;
 
+import com.example.turboaz.dtos.MakeDto;
+import com.example.turboaz.dtos.ModelDto;
 import com.example.turboaz.enums.BodyType;
 import com.example.turboaz.enums.FuelType;
+import com.example.turboaz.exceptions.AmountGreaterThanZeroException;
+import com.example.turboaz.exceptions.UserNotFoundException;
 import com.example.turboaz.models.City;
 import com.example.turboaz.models.Make;
 import com.example.turboaz.models.Model;
@@ -16,13 +20,13 @@ public interface SearchCollectionService {
      * @param makeId
      * @return List<Model>
      */
-    List<Model> getModelsByMakeId(Long makeId);
+    List<ModelDto> getModelsByMakeId(Long makeId);
 
     /**
      * @return List<Make>
      */
 
-    Iterable<Make> getMakes();
+    Iterable<MakeDto> getMakes();
 
     /**
      * @return List<FuelType>
@@ -50,6 +54,6 @@ public interface SearchCollectionService {
      * @param amount
      * @return double
      */
-    double increaseWallet(String username, double amount);
+    double increaseWallet(String username, double amount) throws AmountGreaterThanZeroException, UserNotFoundException;
 
 }
