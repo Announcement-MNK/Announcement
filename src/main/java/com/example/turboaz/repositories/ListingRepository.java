@@ -17,4 +17,10 @@ public interface ListingRepository extends PagingAndSortingRepository<Listing, L
     Page<Listing> findListingsByUsername(String username, Pageable pageable);
 
     Listing findListingByUserIdAndId(Long userId, Long id);
+
+    @Query(value = "SELECT l FROM Listing l WHERE l.updated_at + INTERVAL '1 MONTH' < now()", nativeQuery = true)
+    List<Listing> findAllExpired();
+
+    @Query(value = "SELECT l FROM Listing l WHERE l.updated_at + INTERVAL '1 MONTH' = now() + INTERVAL '1 DAY'", nativeQuery = true)
+    List<Listing> findAllTomorrowExpired();
 }

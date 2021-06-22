@@ -13,6 +13,7 @@ import com.example.turboaz.utils.Paging;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -41,6 +42,18 @@ public interface ListingService {
      * @return listingListDto
      */
     Paging<ListingListDto> getAllListings(int index, int size, String sortBy);
+
+    /**
+     * gets all expired listings
+     * @return
+     */
+    List<Listing> getAllExpiredListings();
+
+    /**
+     * gets all listings will expire tomorrow
+     * @return
+     */
+    List<Listing> getAllTomorrowExpiredListings();
 
     /**
      * @return listingListDto
