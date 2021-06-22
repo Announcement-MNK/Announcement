@@ -21,6 +21,7 @@ public class User {
     @Id
     private Long id;
     private String username;
+    private String email;
     private String fullName;
     private String phone;
     private double balance;

@@ -81,6 +81,16 @@ public class ListingServiceImpl implements  ListingService{
     }
 
     @Override
+    public List<Listing> getAllExpiredListings() {
+        return listingRepository.findAllExpired();
+    }
+
+    @Override
+    public List<Listing> getAllTomorrowExpiredListings() {
+        return listingRepository.findAllTomorrowExpired();
+    }
+
+    @Override
     public Paging<ListingListDto> getUserListings(String username, int index, int size, String sortBy) {
         Pageable paging = preparePage(index, size, sortBy);
         Page<Listing> listings =  listingRepository.findListingsByUsername(username, paging);
