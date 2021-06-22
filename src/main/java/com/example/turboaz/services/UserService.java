@@ -1,5 +1,7 @@
 package com.example.turboaz.services;
 
+import com.example.turboaz.dtos.RegisterPostDto;
+import com.example.turboaz.dtos.RegisterResponseDto;
 import com.example.turboaz.dtos.UserDto;
 
 public interface UserService {
@@ -17,5 +19,5 @@ public interface UserService {
      * @param password
      * @return
      */
-    UserDto register(UserDto user, String password);
+    RegisterResponseDto register(RegisterPostDto user, String password);
 }
