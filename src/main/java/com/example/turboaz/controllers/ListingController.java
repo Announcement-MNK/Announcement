@@ -120,7 +120,7 @@ public class ListingController {
     }
 
     @GetMapping(value = "/listings/search")
-    public ResponseEntity<List<ListingGetDto>> get(
+    public ResponseEntity<Paging<ListingListDto>> get(
             @RequestParam(required = false) String make,
             @RequestParam(required = false) String model,
             @RequestParam(required = false) String location,
@@ -136,8 +136,8 @@ public class ListingController {
             @RequestParam(required = false) Boolean barterOption,
             @RequestParam(required = false) Boolean leaseOption,
             @RequestParam(required = false) Boolean cashOption,
-            @RequestParam(required = false, defaultValue = "10") Integer count,
-            @RequestParam(required = false, defaultValue = "0") Integer page
+            @RequestParam(required = false, defaultValue = "10") Integer size,
+            @RequestParam(required = false, defaultValue = "1") Integer index
     ) {
         return new ResponseEntity<>(service.search(sameMake(make)
                         .and(sameModel(model))
@@ -151,8 +151,8 @@ public class ListingController {
                         .and(hasBarterOption(barterOption))
                         .and(hasLeaseOption(leaseOption))
                         .and(hasCashOption(cashOption)),
-                count,
-                page
+                size,
+                index
         ), HttpStatus.OK);
     }
 

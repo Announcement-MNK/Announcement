@@ -115,12 +115,14 @@ public class ListingServiceImpl implements  ListingService{
 
 
     @Override
-    public List<ListingGetDto> search(Specification<Listing> spec, Integer count, Integer page) {
-        Pageable paging = preparePage(page, count, "id");
-        Page<Listing> pageResult = listingRepository.findAll(spec, paging);
-        return PagingHelper.getResult(pageResult).stream()
-                .map(ListingGetDto::new)
-                .collect(Collectors.toList());
+    public Paging<ListingListDto> search(Specification<Listing> spec, Integer size, Integer index) {
+        Pageable paging = preparePage(index - 1, size, "id");
+        Page<Listing> listings = listingRepository.findAll(spec, paging);
+        return new Paging<ListingListDto>().toBuilder()
+                .pageCount((long) listings.getTotalPages())
+                .pageSize(listings.getTotalElements())
+                .items(DtoHelper.convertToListingListDto(PagingHelper.getResult(listings)))
+                .build();
     }
 
     public Listing convertToEntity(String username, ListingCreationDto listingCreateDto){

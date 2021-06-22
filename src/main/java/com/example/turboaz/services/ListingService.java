@@ -68,6 +68,6 @@ public interface ListingService {
     void makePaid(Long id) throws ListingNotFoundException;
 
 
-    List<ListingGetDto> search(Specification<Listing> spec, Integer count, Integer page);
+    Paging<ListingListDto> search(Specification<Listing> spec, Integer size, Integer index);
 
 }
