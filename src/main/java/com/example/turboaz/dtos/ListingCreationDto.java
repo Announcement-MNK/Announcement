@@ -27,6 +27,5 @@ public class ListingCreationDto {
     private boolean cashOption;
     private String description;
     private String type;
-//    private MultipartFile thumbnail;
     private List<Long> carSpecIds;
 }

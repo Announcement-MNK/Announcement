@@ -35,4 +35,10 @@ public interface ListingRepository extends PagingAndSortingRepository<Listing, L
 
     @Query(value = "SELECT l FROM Listing l WHERE l.updated_at + INTERVAL '1 MONTH' = now() + INTERVAL '1 DAY'", nativeQuery = true)
     List<Listing> findAllTomorrowExpired();
+
+    @Query(value = " from Listing WHERE expiredAt <= current_date")
+    List<Listing> getAllExpireds();
+
+    @Query(value = " from Listing WHERE expiredAt > current_date")
+    List<Listing> getAllWillExpireds();
 }

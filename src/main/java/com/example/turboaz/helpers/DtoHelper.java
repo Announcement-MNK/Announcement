@@ -32,6 +32,8 @@ public class DtoHelper {
         listing.setDescription(dto.getDescription());
         listing.setType(ListingType.valueOf(dto.getType()));
         listing.setCarSpecifications(carSpecifications);
+        listing.setUpdatedAt(LocalDateTime.now());
+        listing.setExpiredAt(LocalDateTime.now().plusMonths(1));
         return listing;
     }
 
