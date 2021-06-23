@@ -27,6 +27,4 @@ public class User {
     private double balance;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Transaction> transactionList;
-//    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
-//    private List<Subscription> subscriptions;
 }

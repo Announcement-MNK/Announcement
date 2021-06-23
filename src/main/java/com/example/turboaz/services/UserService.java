@@ -3,12 +3,6 @@ package com.example.turboaz.services;
 import com.example.turboaz.dtos.*;
 
 public interface UserService {
-    /**
-     * Login via keycloak
-     * @param user
-     * @return
-     */
-    LoginResponseDto login(LoginPostDto user);
 
     /**
      * Register new user via keycloak
@@ -16,4 +10,11 @@ public interface UserService {
      * @return
      */
     RegisterResponseDto register(RegisterPostDto user);
+
+    /**
+     * Login via keycloak
+     * @param user
+     * @return
+     */
+    LoginResponseDto login(LoginPostDto user);
 }
