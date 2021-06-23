@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
 import static com.example.turboaz.utils.SpecificationUtil.*;
 
 @RestController
@@ -26,7 +27,7 @@ public class ListingController {
 
     public ListingController(ListingService service,
                              ImageService imageService,
-                             TransactionService transactionService){
+                             TransactionService transactionService) {
         this.service = service;
         this.imageService = imageService;
         this.transactionService = transactionService;
@@ -47,29 +48,32 @@ public class ListingController {
 
     /**
      * Gets listing by id
+     *
      * @param id
      * @return
      * @throws ListingNotFoundException
      */
     @GetMapping("/listings/{id}")
-    public ResponseEntity<ListingGetDto> get(@PathVariable long id ) throws ListingNotFoundException {
+    public ResponseEntity<ListingGetDto> get(@PathVariable long id) throws ListingNotFoundException {
         return new ResponseEntity<>(service.getListing(id), HttpStatus.OK);
     }
 
     /**
      * creates listing by given data
+     *
      * @param creationDto
      * @param userDto
      * @return
      */
     @PostMapping("/listings")
     public ResponseEntity<ListingGetDto> create(@RequestBody ListingCreationDto creationDto,
-                                                @RequestAttribute("user") UserDto userDto){
+                                                @RequestAttribute("user") UserDto userDto) {
         return new ResponseEntity<>(service.createListing(userDto.getUsername(), creationDto), HttpStatus.CREATED);
     }
 
     /**
      * updates listing by id
+     *
      * @param creationDto
      * @param userDto
      * @param id
@@ -85,6 +89,7 @@ public class ListingController {
 
     /**
      * deletes listing by id
+     *
      * @param userDto
      * @param id
      * @return
@@ -92,13 +97,14 @@ public class ListingController {
      */
     @DeleteMapping("/listings/{id}")
     public ResponseEntity delete(@RequestAttribute("user") UserDto userDto,
-                                                @PathVariable Long id) throws ListingNotFoundException {
+                                 @PathVariable Long id) throws ListingNotFoundException {
         service.deleteListing(userDto.getUsername(), id);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
      * makes type of listing vip by id
+     *
      * @param id
      * @return
      * @throws ListingNotFoundException
@@ -112,6 +118,7 @@ public class ListingController {
 
     /**
      * makes type of listing paid by id
+     *
      * @param id
      * @return
      * @throws ListingNotFoundException
@@ -162,13 +169,13 @@ public class ListingController {
 
     @PostMapping("/listings/{id}/image")
     public ResponseEntity<ImageDto> addImage(@PathVariable Long id,
-                                             @RequestParam("file")MultipartFile file,
+                                             @RequestParam("file") MultipartFile file,
                                              @RequestAttribute("user") UserDto userDto) throws ListingNotFoundException {
         return new ResponseEntity<>(imageService.uploadImage(userDto.getFullName(), id, file), HttpStatus.CREATED);
     }
 
     @GetMapping("/listings/{listingId}/images")
-    public ResponseEntity<List<ImageDto>> getImages(@PathVariable Long listingId){
+    public ResponseEntity<List<ImageDto>> getImages(@PathVariable Long listingId) {
         return new ResponseEntity<>(imageService.getImages(listingId), HttpStatus.OK);
     }
 

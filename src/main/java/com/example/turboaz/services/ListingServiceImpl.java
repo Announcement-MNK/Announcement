@@ -9,6 +9,7 @@ import com.example.turboaz.repositories.*;
 import com.example.turboaz.helpers.DtoHelper;
 import com.example.turboaz.utils.Paging;
 import com.example.turboaz.helpers.PagingHelper;
+import com.google.common.collect.Lists;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,7 +22,7 @@ import java.util.Optional;
 import static com.example.turboaz.helpers.PagingHelper.preparePage;
 
 @Service
-public class ListingServiceImpl implements  ListingService{
+public class ListingServiceImpl implements ListingService {
 
     ListingRepository listingRepository;
     CityRepository cityRepository;
@@ -29,24 +30,38 @@ public class ListingServiceImpl implements  ListingService{
     UserRepository userRepository;
     CarSpecificationRepository carSpecificationRepository;
     TransactionService transactionService;
+    EmailService emailService;
 
+//1	0	1	0	t	t	t	122	120	2021	10	1	2000	1	1	1	1
     public ListingServiceImpl(ListingRepository listingRepository,
                               CityRepository cityRepository,
                               ModelRepository modelRepository,
                               UserRepository userRepository,
                               CarSpecificationRepository carSpecificationRepository,
-                              TransactionService transactionService){
+                              TransactionService transactionService,
+                              EmailService emailService) {
         this.listingRepository = listingRepository;
         this.cityRepository = cityRepository;
         this.modelRepository = modelRepository;
         this.userRepository = userRepository;
         this.carSpecificationRepository = carSpecificationRepository;
         this.transactionService = transactionService;
+        this.emailService = emailService;
+
     }
+
 
     @Override
     public ListingGetDto createListing(String username, ListingCreationDto listingCreateDto) {
         Listing listing = convertToEntity(username, listingCreateDto);
+        List<Subscription> subscriptions = listingRepository.getSubscriptionForEmail(listing.getColor(), listing.getBodyType()
+                , listing.getCity().getId(), listing.getFuelType(), listing.isCashOption(), listing.isCashOption()
+                , listing.isLeaseOption(), listing.getModel().getMake().getId(), listing.getPrice()
+                , listing.getPrice(), listing.getMileage(), listing.getMileage(), listing.getYear(), listing.getYear(), listing.getModel().getId());
+        System.out.println(subscriptions);
+        for (Subscription s : subscriptions) {
+            emailService.sendMail(s.getUser().getEmail(),"Salam","Axtardighin elan geldi");
+        }
         return new ListingGetDto(listingRepository.save(listing));
     }
 
@@ -71,8 +86,8 @@ public class ListingServiceImpl implements  ListingService{
 
     @Override
     public Paging<ListingListDto> getAllListings(int index, int size, String sortBy) {
-        Pageable paging = preparePage(index-1, size, sortBy);
-        Page<Listing> listings =  listingRepository.findAll(paging);
+        Pageable paging = preparePage(index - 1, size, sortBy);
+        Page<Listing> listings = listingRepository.findAll(paging);
         return new Paging<ListingListDto>().toBuilder()
                 .pageCount((long) listings.getTotalPages())
                 .pageSize(listings.getTotalElements())
@@ -80,20 +95,20 @@ public class ListingServiceImpl implements  ListingService{
                 .build();
     }
 
-    @Override
-    public List<Listing> getAllExpiredListings() {
-        return listingRepository.findAllExpired();
-    }
-
-    @Override
-    public List<Listing> getAllTomorrowExpiredListings() {
-        return listingRepository.findAllTomorrowExpired();
-    }
+//    @Override
+//    public List<Listing> getAllExpiredListings() {
+//        return listingRepository.findAllExpired();
+//    }
+//
+//    @Override
+//    public List<Listing> getAllTomorrowExpiredListings() {
+//        return listingRepository.findAllTomorrowExpired();
+//    }
 
     @Override
     public Paging<ListingListDto> getUserListings(String username, int index, int size, String sortBy) {
         Pageable paging = preparePage(index, size, sortBy);
-        Page<Listing> listings =  listingRepository.findListingsByUsername(username, paging);
+        Page<Listing> listings = listingRepository.findListingsByUsername(username, paging);
         return new Paging<ListingListDto>().toBuilder()
                 .pageCount((long) listings.getTotalPages())
                 .pageSize(listings.getTotalElements())
@@ -139,7 +154,7 @@ public class ListingServiceImpl implements  ListingService{
                 .build();
     }
 
-    public Listing convertToEntity(String username, ListingCreationDto listingCreateDto){
+    public Listing convertToEntity(String username, ListingCreationDto listingCreateDto) {
         List<CarSpecification> carSpecifications = new ArrayList<>();
         if (listingCreateDto.getCarSpecIds() != null) {
             listingCreateDto.getCarSpecIds().stream()
@@ -148,7 +163,7 @@ public class ListingServiceImpl implements  ListingService{
         Model model = modelRepository.findById(listingCreateDto.getModelId()).get();
         City city = cityRepository.findById(listingCreateDto.getCityId()).get();
         User user = userRepository.findUserByUsername(username);
-        Listing listing = DtoHelper.convertListingCreationDtoToEntity(listingCreateDto, model, city,user, carSpecifications);
+        Listing listing = DtoHelper.convertListingCreationDtoToEntity(listingCreateDto, model, city, user, carSpecifications);
         return listing;
     }
 

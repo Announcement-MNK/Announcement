@@ -47,13 +47,13 @@ public interface ListingService {
      * gets all expired listings
      * @return
      */
-    List<Listing> getAllExpiredListings();
+//    List<Listing> getAllExpiredListings();
 
     /**
      * gets all listings will expire tomorrow
      * @return
      */
-    List<Listing> getAllTomorrowExpiredListings();
+//    List<Listing> getAllTomorrowExpiredListings();
 
     /**
      * @return listingListDto

@@ -21,8 +21,8 @@ public class NotifySubscriptionJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        List<Listing> listings = listingService.getAllTomorrowExpiredListings();
-        listings.stream().forEach(l -> emailService.sendMail(l.getUser().getEmail(),
-                "Turbo AZ", "Your announcement will expire tomorrow"));
+//        List<Listing> listings = listingService.getAllTomorrowExpiredListings();
+//        listings.stream().forEach(l -> emailService.sendMail(l.getUser().getEmail(),
+//                "Turbo AZ", "Your announcement will expire tomorrow"));
     }
 }
