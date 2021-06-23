@@ -49,4 +49,5 @@ public class Listing {
     private List<Image> images;
     private boolean isActive;
     private LocalDateTime updatedAt;
+    private LocalDateTime expiredAt;
 }
