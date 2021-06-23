@@ -22,6 +22,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.stereotype.Component;
 
 @Configuration
 @EnableWebSecurity
@@ -30,11 +31,11 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        super.configure(http);
         http.cors().and().csrf().disable().sessionManagement().
 
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers("/api/v1/users/create").permitAll()
+                .antMatchers("/api/v1/users/signin").permitAll()
                 .anyRequest().authenticated();
     }
 

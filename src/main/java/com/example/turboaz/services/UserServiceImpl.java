@@ -40,12 +40,6 @@ public class UserServiceImpl implements UserService{
     @Value("${keycloak.credentials.secret}")
     private String clientSecret;
 
-    @Value("${keycloak.credentials.admin-username}")
-    private String adminUsername;
-
-    @Value("${keycloak.credentials.admin-password}")
-    private String adminPassword;
-
     UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository){
@@ -83,7 +77,7 @@ public class UserServiceImpl implements UserService{
     public boolean registerToKeyclaok(RegisterPostDto userDTO){
         Keycloak keycloak = KeycloakBuilder.builder().serverUrl(authServerUrl)
                 .grantType(OAuth2Constants.PASSWORD).realm("master").clientId("admin-cli")
-                .username(adminUsername).password(adminPassword)
+                .username("nurlan").password("rafet123")
                 .resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
         UserRepresentation user = new UserRepresentation();
         user.setEnabled(true);
