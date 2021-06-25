@@ -58,9 +58,8 @@ public class ListingServiceImpl implements ListingService {
                 , listing.getCity().getId(), listing.getFuelType(), listing.isCashOption(), listing.isCashOption()
                 , listing.isLeaseOption(), listing.getModel().getMake().getId(), listing.getPrice()
                 , listing.getPrice(), listing.getMileage(), listing.getMileage(), listing.getYear(), listing.getYear(), listing.getModel().getId());
-        System.out.println(subscriptions);
         for (Subscription s : subscriptions) {
-            emailService.sendMail(s.getUser().getEmail(),"Salam","Axtardighin elan geldi");
+            emailService.sendMail(s.getUser().getEmail(),"Hello","We find an announcement according to your search");
         }
         return new ListingGetDto(listingRepository.save(listing));
     }
@@ -94,16 +93,6 @@ public class ListingServiceImpl implements ListingService {
                 .items(DtoHelper.convertToListingListDto(PagingHelper.getResult(listings)))
                 .build();
     }
-
-//    @Override
-//    public List<Listing> getAllExpiredListings() {
-//        return listingRepository.findAllExpired();
-//    }
-//
-//    @Override
-//    public List<Listing> getAllTomorrowExpiredListings() {
-//        return listingRepository.findAllTomorrowExpired();
-//    }
 
     @Override
     public Paging<ListingListDto> getUserListings(String username, int index, int size, String sortBy) {
