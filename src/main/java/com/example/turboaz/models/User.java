@@ -27,4 +27,6 @@ public class User {
     private double balance;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Transaction> transactionList;
+    @Column(name = "is_active", columnDefinition = "boolean default false")
+    private boolean isActive;
 }

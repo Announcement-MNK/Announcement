@@ -4,7 +4,9 @@ import com.example.turboaz.dtos.LoginPostDto;
 import com.example.turboaz.dtos.LoginResponseDto;
 import com.example.turboaz.dtos.RegisterPostDto;
 import com.example.turboaz.dtos.RegisterResponseDto;
+import com.example.turboaz.models.ConfirmationToken;
 import com.example.turboaz.models.User;
+import com.example.turboaz.repositories.ConfirmationTokenRepository;
 import com.example.turboaz.repositories.UserRepository;
 import javassist.tools.web.BadHttpRequest;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -41,22 +43,34 @@ public class UserServiceImpl implements UserService{
     private String clientSecret;
 
     UserRepository userRepository;
+    ConfirmationTokenRepository confirmationTokenRepository;
+    EmailService emailService;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository,
+                           ConfirmationTokenRepository confirmationTokenRepository,
+                           EmailService emailService){
         this.userRepository = userRepository;
+        this.confirmationTokenRepository = confirmationTokenRepository;
+        this.emailService = emailService;
     }
 
     @Override
     public RegisterResponseDto register(RegisterPostDto userDTO) {
         Boolean isRegisteredToKeyclaok = registerToKeyclaok(userDTO);
         if (isRegisteredToKeyclaok){
-            User user = new com.example.turboaz.models.User();
+            User user = new User();
             user.setUsername(userDTO.getUsername());
             user.setEmail(userDTO.getEmail());
             user.setFullName(userDTO.getName()+" "+userDTO.getSurname());
             user.setPhone(userDTO.getPhone());
             user.setBalance(0);
-            return new RegisterResponseDto(userRepository.save(user));
+            User crated = userRepository.save(user);
+
+            ConfirmationToken confirmationToken = new ConfirmationToken(user);
+            emailService.sendMail(user.getEmail(), "Complete Registration!", "To confirm your account, please click here : " + "http://localhost:8081/api/v1/users/confirm-account?token=" + confirmationToken.getConfirmationToken());
+            confirmationTokenRepository.save(confirmationToken);
+
+            return new RegisterResponseDto("Please confirm your email!");
         }
         return null;
     }
@@ -72,6 +86,18 @@ public class UserServiceImpl implements UserService{
         AccessTokenResponse response =
                 authzClient.obtainAccessToken(user.getUsername(), user.getPassword());
         return new LoginResponseDto(response.getToken());
+    }
+
+    @Override
+    public void confirmAccount(String tokenStr){
+        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(tokenStr);
+        if(token != null)
+        {
+            User user = userRepository.findUserByUsername(token.getUser().getUsername());
+            user.setActive(true);
+            userRepository.save(user);
+            emailService.sendMail(user.getEmail(), "Congrats","You are registered successfully!");
+        }
     }
 
     public boolean registerToKeyclaok(RegisterPostDto userDTO){
@@ -100,5 +126,7 @@ public class UserServiceImpl implements UserService{
         }
         return response.getStatus() == 201;
     }
+
+
 
 }
