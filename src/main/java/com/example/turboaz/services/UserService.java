@@ -17,4 +17,10 @@ public interface UserService {
      * @return
      */
     LoginResponseDto login(LoginPostDto user);
+
+    /**
+     * confirm account
+     * @param tokenStr
+     */
+    void confirmAccount(String tokenStr);
 }
